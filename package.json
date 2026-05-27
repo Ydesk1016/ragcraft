@@ -3,7 +3,10 @@
   "private": true,
   "packageManager": "pnpm@9.15.0",
   "scripts": {
-    "dev": "turbo dev",
+    "dev": "node scripts/check-dev.mjs && turbo dev",
+    "dev:check": "node scripts/check-dev.mjs",
+    "dev:force": "turbo dev",
+    "infra:up": "docker compose up -d",
     "build": "turbo build",
     "typecheck": "turbo typecheck",
     "lint": "turbo lint"
