@@ -47,7 +47,8 @@ export function RagDashboard() {
 
   async function uploadDocument(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const form = new FormData(event.currentTarget);
+    const formElement = event.currentTarget;
+    const form = new FormData(formElement);
     const response = await fetch("/api/documents/upload", { method: "POST", body: form });
     const body = (await response.json()) as { data?: RagDocument; error?: string };
 
@@ -58,7 +59,7 @@ export function RagDashboard() {
 
     setDocuments((current) => [body.data!, ...current]);
     setMessage("文档已入队，Worker 会异步处理");
-    event.currentTarget.reset();
+    formElement.reset();
   }
 
   return (

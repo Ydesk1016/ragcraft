@@ -4,8 +4,6 @@ import { createRedisConnection } from "./lib/redis.js";
 import { processDocument } from "./processors/documents.js";
 
 const connection = createRedisConnection();
-await verifyRedisConnection();
-
 const worker = new Worker(env.DOCUMENT_QUEUE_NAME, processDocument, { connection });
 
 worker.on("completed", (job) => {
@@ -24,13 +22,3 @@ const shutdown = async () => {
 
 process.on("SIGINT", () => void shutdown());
 process.on("SIGTERM", () => void shutdown());
-
-async function verifyRedisConnection() {
-  try {
-    await connection.ping();
-  } catch (error) {
-    console.error("Redis is not reachable. Start infrastructure with `pnpm infra:up` before running the worker.");
-    await connection.quit().catch(() => undefined);
-    throw error;
-  }
-}
